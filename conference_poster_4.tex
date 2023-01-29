@@ -91,7 +91,7 @@ $P(M \mathcal N)\sim \mathcal N(\mu_Y, \Sigma_Y)$
 $$
 \begin{aligned}
 \mu_Y &= M\mu_X\\
-\Sigma_{YY} &= M^T\Sigma_{XX}M
+\Sigma_{YY} &= M^\top\Sigma_{XX}M
 \end{aligned}
 $$
 
@@ -146,8 +146,8 @@ $$
 P(w|Y,X) \sim \mathcal N(\mu,\Sigma)
 $$
 $$
-\mu = \frac{1}{\sigma_n^2}\Sigma X^TY \quad
-\Sigma = \left(\frac{1}{\sigma_n^2}X^TX + \frac{1}{\sigma_p^2}I\right)^{-1}
+\mu = \frac{1}{\sigma_n^2}\Sigma X^\top Y \quad
+\Sigma = \left(\frac{1}{\sigma_n^2}X^\top X + \frac{1}{\sigma_p^2}I\right)^{-1}
 $$
 uncertainty: \textcolor{orange}{aleartoric} + \textcolor{green}{epistemic}
 
@@ -155,40 +155,29 @@ uncertainty: \textcolor{orange}{aleartoric} + \textcolor{green}{epistemic}
 \vspace{-0.3cm}
 
     $$
-    X_{new}X^\top X_{new} = X^TX + x_{t+1}x_{t+1}^\top
+    X_{new}X^\top X_{new} = X^\top Y + x_{t+1}x_{t+1}^\top
     $$
     $$
-    X_{new}^\top Y_{new} = X^T Y + y_{t+1} x_{t+1}
+    X_{new}^\top Y_{new} = X^\top Y + y_{t+1} x_{t+1}
     $$
 
 
 \underline{\textbf{Fast}} : $\mathcal O(d^3) \rightarrow \mathcal O(d^2)$
 \vspace{-0.3cm}
     $$
-    (A+xx^\top)^{-1} = A^{-1} - \frac{(A^{-1}x)(A^{-1}x)^T}{1+x^\top A^{-1}x}
+    (A+xx^\top)^{-1} = A^{-1} - \frac{(A^{-1}x)(A^{-1}x)^\top}{1+x^\top A^{-1}x}
     $$
     $$
     (X_{new}^\top X_{new} + \sigma_n^2 I )^{-1} = (\underset{A}{\underbrace{X^\top X + \sigma_n^2}} + x_{t+1}x_{t+1}^\top)^{-1}
     $$
-
-% \begin{tabular}{lp{5.3cm}lp{3.0cm}|}
-% A = input() & Aguarda a entrada de caracteres armazenados em A \\
-% \end{tabular}
-% \begin{tabular}{lp{4.7cm}lp{3.0cm}|}
-% B = int(input()) & Aguarda a entrada de inteiros armazenados em B \\
-% \end{tabular}
-% \begin{tabular}{lp{2.6cm}lp{3.0cm}|}
-% A,B = map(int,input().split()) & Aguarda a entrada de inteiros  separados por espaço, armazenados em A e B respectivamente \\
-% \end{tabular}
-% \begin{tabular}{lp{3.0cm}lp{3.0cm}|}
-% input("Pressione ENTER") & Aguarda pressionar ENTER para prosseguir - como não declarou nenhuma variável, não irá gravar nada. \\
-% \end{tabular}
-
-\vspace{0.0em} % When there are two boxes, some whitespace may need to be added if the one on the right has more content
+\begin{itemize}\compresslist
+    \item posterior is not gaussian not closed
+    \item posterior cannot cover by variational infer
+\end{itemize}
 }
 
 
-\headerbox{GP \& Kalman Filter}{name=introduction,column=1,row=0,bottomaligned=objectives}{
+\headerbox{GP \& Kalman Filter}{name=introduction,column=1,row=0}{
 
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Gaussian Process}}\vspace{-0.3cm}
 $$
@@ -199,9 +188,11 @@ y &= f(x) + \epsilon \quad \epsilon\sim\mathcal N(0,\sigma_n^2)
 \\
 \mu'_{x^*} &= \mu_{x^*} + K_{x^*X}(K_{XX}+\sigma_n^2I)^{-1}Y
 \\
-k'_{x^*x^*} &= K_{x^*x^*} - K_{x^*X}^T(K_{XX}+\sigma_n^2I)^{-1}K_{x^*X}
+k'_{x^*x^*} &= K_{x^*x^*} - K_{x^*X}^\top (K_{XX}+\sigma_n^2I)^{-1}K_{x^*X}
 \end{aligned}
 $$
+
+
 \underline{\textbf{Kernel}}
 
 \textit{RBF}\vspace{-0.3cm}
@@ -246,23 +237,24 @@ equals to BLR with $\lambda  = \sigma_p^2$
 
 
 
+
 }
 
-\headerbox{GP \& Kalman Filter}{name=introduction,column=2,row=0,bottomaligned=objectives}{
+\headerbox{GP \& Kalman Filter}{name=introduction,column=2,row=0}{
 
 \underline{\textbf{Fast}}
 \begin{itemize}
     \item $k(x,x') = \phi(x)\phi(x)^\top~\mathcal O(n^3)\rightarrow \mathcal O(nm^2+m^3)$
     \item fourier features: $k(x,x') \approx k(x-x') $
     
-    $=  \int_{\mathbb  R^d} p(\omega)e^{j\omega^T(x-x')}dw$ 
+    $=  \int_{\mathbb  R^d} p(\omega)e^{j\omega^top(x-x')}dw$ 
     
     Bochner Theorem:$p(\omega)\geq0 \Rightarrow k\geq 0$
     \item inducing points: $\mathcal O(n^3)$ 
         
         SoR: subset of regressor
         
-        FITC: Fully independent training conditional
+        FITC: cubic inducing points, liner point
 \end{itemize}
 
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Kalman Filter}}
@@ -294,9 +286,38 @@ x_{t+1} &= \hat x_{t+1} + K_{t+1}(y_{t+1}-H_t\hat x_{t+1})\\
 $$
 kalman gain:$K_{t+1}$
 
-assume $P(x_{t+1}|x_t)\sim\mathcal N(x_t,\sigma_x^2)\quad x_0\sim\mathcal N(0,\sigma_0^2)$, the Kalman Filter can be seen as a GP 
+\textbf{Wiener process/Brownian motion}
+
+assume $P(x_{t+1}|x_t)\sim\mathcal N(x_t,\sigma_x^2)\quad x_0\sim\mathcal N(0,\sigma_0^2)$, the Kalman Filter can be seen as a GP()
 
 $f\sim \mathcal{GP}(0, k_{KF})\quad k_{KF}(x,x') = \sigma_0^2 + \sigma_x^2 min\{x,x'\}$
+
+\begin{center}
+    \includegraphics[width=0.8\textwidth,trim={0cm 3cm 0 2cm},clip]{figures/czu87jWDYg1FQRy.png}
+\end{center}
+$$
+\begin{aligned}
+x_0\sim \mathcal N(\left[\begin{smallmatrix}
+2,0
+\end{smallmatrix}\right]^\top,\sigma^2 I) 
+\\
+x_{t+1} = 
+\left[\begin{smallmatrix}
+1 & 1 \\ 0 & a
+\end{smallmatrix}\right]x_t
+\quad
+y_t\sim  \mathcal N (\left[\begin{smallmatrix}
+    1 \\ 0 
+\end{smallmatrix}\right] x_t, \sigma_y^2)
+\end{aligned}
+$$
+
+\begin{tabular}{c|c}
+    $a=1, \sigma=1, \sigma_y=1$& $a=1,\sigma=1,\sigma_y=1$ \\\hline
+    $a=1, \sigma=10, \sigma_y=10$ & $a=0.5,\sigma=1,\sigma_y=10$ \\
+\end{tabular}
+
+
 }
 
 %------------------------------------------------
@@ -484,16 +505,21 @@ $$
 \vspace{-0.2cm}
 $$
 \begin{aligned}
-\mu_{SWA} &= \frac{1}{T}\sum_1^T \theta_i\\
-\Sigma_{SWA} &= \frac{1}{T-1}\sum_1^T(\theta_i - \mu_{SWA})(\theta_i-\mu_{SWA})^T
+\mu_{SWA} &= \frac{1}{T}\sum_1^\top \theta_i\\
+\Sigma_{SWA} &= \frac{1}{T-1}\sum_1^\top(\theta_i - \mu_{SWA})(\theta_i-\mu_{SWA})^\top
 \end{aligned}
 $$
 
-\underline{\textbf{dropout}}
+\underline{\textbf{Dropout}}
+\vspace{-0.3cm}
 $$ 
 p(y^*|x^*,X,Y) \approx \mathbb E_{\theta\sim q(\cdot|\lambda)}[p(y^*|x^*,\theta)]
 $$
-dropout is also applied in prediction
+\begin{itemize}\compresslist
+    \item dropout is also applied in prediction
+    \item dropout can be seen as varational inference
+\end{itemize}
+
 
 
 
@@ -511,7 +537,7 @@ $$
 \underline{\textbf{regret}}
 \vspace{-0.7cm}
 $$
-R_T = \sum_{t=1}^T (max_{x\in D}f(x)-f(x_t))
+R_T = \sum_{t=1}^\top (max_{x\in D}f(x)-f(x_t))
 $$
 \begin{itemize}\compresslist
     \item sublinear(optimal) if $\frac{R_T}{T} \rightarrow 0$
@@ -527,7 +553,7 @@ $$
 \textbf{Uncertainty Sampling}
 \vspace{-0.3cm}
 $$
-x_t = \underset{x\in D}{argmax}\sigma_{t-1}^2(x)
+x_t = \underset{x\in D}{argmax} \frac{\textcolor{green}{\sigma_{e}^2(x)}}{\textcolor{orange}{\sigma_a(x)}}
 $$
 \vspace{-0.3cm}
 \begin{itemize}
@@ -589,6 +615,9 @@ $$
 $$
 P(|\mu - \frac{1}{n}\sum_{i=1}^n Z_i|>\varepsilon) \leq 2exp(-\frac{2n\varepsilon^2}{C^2})
 $$
+\begin{itemize}
+    \item $cR$ do not change policy
+\end{itemize}
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Model Based}}
 
 \underline{\textbf{Value Iteration}}
@@ -655,7 +684,7 @@ Theorem: $\sum_t\alpha_t=\infty,\sum_t\alpha_t^2 < \infty \Rightarrow P(\hat Q^*
 
 $$
 \begin{aligned}
-\nabla_{\theta} J(\theta) &= \mathbb E_{\tau\sim p_\theta(\tau)}[\sum_{t=0}^T\gamma^t(\sum_{t'=t}^T\gamma^{t'-t}r_t)\nabla_\theta ln\pi_\theta(a_t|x_t)]
+\nabla_{\theta} J(\theta) &= \mathbb E_{\tau\sim p_\theta(\tau)}[\sum_{t=0}^\top\gamma^t(\sum_{t'=t}^\top\gamma^{t'-t}r_{t'})\nabla_\theta ln\pi_\theta(a_t|x_t)]
 \\
 \theta  &\leftarrow \theta + \eta_t \nabla_\theta J(\theta)
 \end{aligned}
