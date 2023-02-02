@@ -11,6 +11,6 @@
 
 2 page in total 
 
-![img](Probabilistic_Artificial_Intelligence_CheatSheet0.png)
+![img](ETHz_Probabilistic_Artificial_Intelligence_CheatSheet0.png)
 
-![img](Probabilistic_Artificial_Intelligence_CheatSheet1.png)
+![img](ETHz_Probabilistic_Artificial_Intelligence_CheatSheet1.png)
