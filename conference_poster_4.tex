@@ -22,6 +22,7 @@
 \usepackage{enumitem} % Used to reduce itemize/enumerate spacing
 \usepackage{palatino} % Use the Palatino font
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{bbding}
 
 \usepackage{multicol} % Required for multiple columns
 \setlength{\columnsep}{1.5em} % Slightly increase the space between columns
@@ -77,7 +78,7 @@ linewidth=1pt % Width of the border lines around content boxes
 
 $P(\mathcal N | \mathcal N)\sim \mathcal N(\mu_{A|B},\Sigma_{A|B})$
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.2cm}
 \begin{aligned}
 \mu_{A|B} &= \mu_A + \Sigma_{AB}\Sigma_{BB}^{-1}(x_B - \mu_B)
 \\
@@ -88,7 +89,7 @@ $$
 
 $P(M \mathcal N)\sim \mathcal N(\mu_Y, \Sigma_Y)$
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.2cm}
 \begin{aligned}
 \mu_Y &= M\mu_X\\
 \Sigma_{YY} &= M^\top\Sigma_{XX}M
@@ -97,17 +98,16 @@ $$
 
 $P(\mathcal N + \mathcal N) \sim P(\mu_{Y}, \Sigma_Y)$
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.2cm}
 \begin{aligned}
-\Sigma_{YY}&= (\Sigma_{XX}^{-1}+\Sigma_{X'X'}^{-1})^{-1}
-\\
-\mu_{Y} &= \Sigma_{YY}\Sigma_{XX}^{-1}\mu_X + \Sigma_{YY}\Sigma_{X'X'}^{-1}\mu_{X'}
+\mu_{Y} &= \mu_X + \mu_{X'}\\
+\Sigma_{YY} &= \Sigma_{X} + \Sigma_{X'}
 \end{aligned}
 $$
 
 $P(\mathcal N \mathcal N) \sim P(\mu_{Y}, \Sigma_Y)$
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.2cm}
 \begin{aligned}
 \Sigma_{YY}&= (\Sigma_{XX}^{-1}+\Sigma_{X'X'}^{-1})^{-1}
 \\
@@ -115,7 +115,7 @@ $$
 \end{aligned}
 $$
 
-entropy: $ln(\sigma\sqrt{2\pi e})$ (max in all distribution)
+entropy: $ln(\sigma\sqrt{2\pi e})$ (max in all distribution at $\mu,\Sigma$)
 
 %--------------------------------------
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - KL-Divergence:}} 
@@ -124,55 +124,62 @@ $$
 D_{KL}(p\Vert q) = \int  p(x)log\frac{p(x)}{q(x)}dx = H(p\vert q) - H(p)
 $$
 \begin{itemize}\compresslist
-    \item $D_{KL}(p||q)$ : mode averageing
-    \item $D_{KL}(q||P)$ : mode seeking
+    \item $D_{KL}(p||q)$(backward) : mode averageing 
+    \item $D_{KL}(q||p)$(forward) : mode seeking
     
     $p\sim\mathcal N(0,diag(\sigma_1^2,\sigma_2^2))\Rightarrow\sigma_q^2 = \frac{2}{\sigma_1^{-2}+\sigma_2^{-2}}$
-    \item $D_{KL}(q||p)$ is well defined if $q$ is a subset of $p$
-    \item $q\sim \mathcal N(\mathbb E(p,Var(p)) \Rightarrow H(p\vert q)=H(q)$
+    
+    $D_{KL}(q||p)$ is well defined if $q$ is a subset of $p$
+    \item $q\sim \mathcal N(\mathbb E(p),Var(p)) \Rightarrow H(p\vert q)=H(q)$
 \end{itemize}
 
 
 %--------------------------------------
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Bayesian Linear Regression:}}
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.2cm}
 y = w^\top x + \epsilon\quad 
 \textcolor{orange}{\epsilon\sim \mathcal N(0,\sigma_n^2)}
 ~
 \textcolor{green}{w\sim\mathcal N(0,\sigma_p^2)}
 $$
-$$
+$$\vspace{-0.2cm}
 P(w|Y,X) \sim \mathcal N(\mu,\Sigma)
 $$
-$$
+$$\vspace{-0.2cm}
 \mu = \frac{1}{\sigma_n^2}\Sigma X^\top Y \quad
 \Sigma = \left(\frac{1}{\sigma_n^2}X^\top X + \frac{1}{\sigma_p^2}I\right)^{-1}
 $$
-uncertainty: \textcolor{orange}{aleartoric} + \textcolor{green}{epistemic}
+uncertainty: \textcolor{orange}{aleartoric(rand)} + \textcolor{green}{epistemic(know)}
 
 \underline{\textbf{Online}}
-\vspace{-0.3cm}
+\vspace{-0.4cm}
 
+    $$\vspace{-0.2cm}
+    X_{new}^\top X_{new} = X^\top X + x_{t+1}x_{t+1}^\top
     $$
-    X_{new}X^\top X_{new} = X^\top Y + x_{t+1}x_{t+1}^\top
-    $$
-    $$
+    $$\vspace{-0.2cm}
     X_{new}^\top Y_{new} = X^\top Y + y_{t+1} x_{t+1}
     $$
 
 
 \underline{\textbf{Fast}} : $\mathcal O(d^3) \rightarrow \mathcal O(d^2)$
-\vspace{-0.3cm}
-    $$
+\vspace{-0.4cm}
+    $$\vspace{-0.2cm}
     (A+xx^\top)^{-1} = A^{-1} - \frac{(A^{-1}x)(A^{-1}x)^\top}{1+x^\top A^{-1}x}
     $$
-    $$
+    $$\vspace{-0.2cm}
     (X_{new}^\top X_{new} + \sigma_n^2 I )^{-1} = (\underset{A}{\underbrace{X^\top X + \sigma_n^2}} + x_{t+1}x_{t+1}^\top)^{-1}
     $$
+
+\underline{\textbf{Bayesian Logistic Regression}}
+\vspace{-0.2cm}
 \begin{itemize}\compresslist
-    \item posterior is not gaussian not closed
-    \item posterior cannot cover by variational infer
+    \item posterior is not gaussian
+    \item posterior is not closed 
+    \item posterior log-density  is convex
+    \item $\sigma\uparrow \rightarrow$ standard logistic regression
+    \item posterior cannot cover by $\mathcal N$ variational infer   
 \end{itemize}
 }
 
@@ -191,7 +198,9 @@ y &= f(x) + \epsilon \quad \epsilon\sim\mathcal N(0,\sigma_n^2)
 k'_{x^*x^*} &= K_{x^*x^*} - K_{x^*X}^\top (K_{XX}+\sigma_n^2I)^{-1}K_{x^*X}
 \end{aligned}
 $$
+$\mathcal O(n^3)$ for the inverse operation
 
+prediction in closed form 
 
 \underline{\textbf{Kernel}}
 
@@ -206,7 +215,7 @@ $$
 \begin{aligned}
 \underset{l\rightarrow 0}{lim}~k(u,v) &= \sigma_F^2\delta(u-v)\\
 \underset{l\rightarrow 0}{lim}~k'(x,x) &= k(x,x) - k_{xX}(K_{XX}+\sigma_n^2 I)^{-1}k_{xX}^\top \\
-&= \frac{\sigma_F^2\sigma^2}{\sigma_F^2 + \sigma^2}
+&= \frac{\sigma_F^2\sigma_n^2}{\sigma_F^2 + \sigma_n^2}
 \end{aligned}
 $$
 \begin{center}
@@ -243,21 +252,23 @@ equals to BLR with $\lambda  = \sigma_p^2$
 \headerbox{GP \& Kalman Filter}{name=introduction,column=2,row=0}{
 
 \underline{\textbf{Fast}}
-\begin{itemize}
+\begin{itemize}\compresslist
     \item $k(x,x') = \phi(x)\phi(x)^\top~\mathcal O(n^3)\rightarrow \mathcal O(nm^2+m^3)$
     \item fourier features: $k(x,x') \approx k(x-x') $
     
-    $=  \int_{\mathbb  R^d} p(\omega)e^{j\omega^top(x-x')}dw$ 
+    $=  \int_{\mathbb  R^d} p(\omega)e^{j\omega^top(x-x')}dw$ (stationary)
     
     Bochner Theorem:$p(\omega)\geq0 \Rightarrow k\geq 0$
     \item inducing points: $\mathcal O(n^3)$ 
+    
+        cubic inducing points, linear point
         
-        SoR: subset of regressor
+        SoR: subset of regressor (zero)
         
-        FITC: cubic inducing points, liner point
+        FITC:  (diag)
 \end{itemize}
 
-\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Kalman Filter}}
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Kalman Filter}}\vspace{-0.3cm}
 $$
 x_{t+1} = F_tx_{t} + \Sigma_{x,t} \quad y_t  = H_t x_t + \Sigma_y
 $$
@@ -266,7 +277,7 @@ P(x_{t+1}|x_t) \sim \mathcal N(Fx_t, \Sigma_{x,t})
 ~
 P(y_t | x_t) \sim \mathcal N(H_t x_t, \Sigma_y)
 $$
-\textbf{predict}
+\textbf{predict}\vspace{-0.4cm}
 $$
 \begin{aligned}
 \hat x_{t+1} = F_t x_t \quad \hat \Sigma_{x,t+1} = H_t \Sigma_{x,t}H_t^\top + \Sigma_{d_t}
@@ -275,7 +286,7 @@ $$
 $$
 P(x_t|y_{1:t}) \sim \mathcal N(\mu_t, \Sigma_{d_t}^2)
 $$
-\textbf{correct}
+\textbf{correct}\vspace{-0.3cm}
 $$
 \begin{aligned}
 K_{t+1} &= \hat \Sigma_{x,t}H_t^\top (H_t\hat \Sigma_{x,t}H_t^\top + \Sigma_y)^{-1}
@@ -284,17 +295,26 @@ x_{t+1} &= \hat x_{t+1} + K_{t+1}(y_{t+1}-H_t\hat x_{t+1})\\
 \Sigma_{x,t+1} &= (I-K_{t+1}H_t)\hat \Sigma_{x,t}
 \end{aligned}
 $$
-kalman gain:$K_{t+1}$
+kalman gain:$K_{t+1}$, can be computed offline
 
-\textbf{Wiener process/Brownian motion}
+\underline{\textbf{Linear  Dynamic System}}
+\vspace{-0.5cm}
+$$
+x_{k+1} \sim (a x_k,\sigma^2) , x_0=0 \rightarrow MLE(a) = \frac{\sum_{i=0}^{n-1}x_ix^{i+1}}{\sum_{i=0}^{n-1}x_i^2}
+$$
 
-assume $P(x_{t+1}|x_t)\sim\mathcal N(x_t,\sigma_x^2)\quad x_0\sim\mathcal N(0,\sigma_0^2)$, the Kalman Filter can be seen as a GP()
+if $a\sim \mathcal N(0, \frac{\sigma^2}{\lambda})$, $Var(a|x_0,\cdots,x_n) = \frac{\sigma^2}{\lambda + \sum_{i=0}^{n-1}x_i^2}$
+
+\underline{\textbf{Wiener process/Brownian motion}}
+
+assume $P(x_{t+1}|x_t)\sim\mathcal N(x_t,\sigma_x^2)\quad x_0\sim\mathcal N(0,\sigma_0^2)$, the Kalman Filter can be seen as a GP
 
 $f\sim \mathcal{GP}(0, k_{KF})\quad k_{KF}(x,x') = \sigma_0^2 + \sigma_x^2 min\{x,x'\}$
 
 \begin{center}
-    \includegraphics[width=0.8\textwidth,trim={0cm 3cm 0 2cm},clip]{figures/czu87jWDYg1FQRy.png}
+    \includegraphics[width=0.8\textwidth,trim={0cm 4cm 0 3cm},clip]{figures/czu87jWDYg1FQRy.png}
 \end{center}
+\vspace{-0.3cm}
 $$
 \begin{aligned}
 x_0\sim \mathcal N(\left[\begin{smallmatrix}
@@ -327,15 +347,16 @@ $$
 \headerbox{Approximation \& MCMC}{name=results,column=3,span=1,row=0}{
 
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Approximation}}
-\textbf{Laplacian approximation}
+\underline{\textbf{Laplacian approximation}}
 \vspace{-0.3cm}
 $$
 q(\theta)\sim \mathcal (\hat\theta, \Lambda^{-1})~~
-\hat\theta = \underset{\theta}{argmax}p(\theta|y)~~
+\hat\theta = \underset{\theta}{argmax}~p(\theta|y)~~
 \Lambda = -\nabla\nabla p(\hat\theta|y)
 $$
-\vspace{-0.3cm}
+\vspace{-1.0cm}
 \begin{itemize}\compresslist
+    \item not skewed
     \item only one modal 
     \item no previous knowledge
 \end{itemize}
@@ -348,75 +369,83 @@ $$
     \item Left: backward KL $D_{KL}(\textcolor{lightblue}{q}\Vert \textcolor{orange}{p})$ 
     \item Right: forward KL $D_{KL}(\textcolor{orange}{p}\Vert \textcolor{lightblue}{q})$
 \end{itemize}
-
-\textbf{Evidence Lower Bound(ELBO)}
 \vspace{-0.3cm}
-$$
+\underline{\textbf{Evidence Lower Bound(ELBO)}}
+\vspace{-0.3cm}
+$$\vspace{-0.2cm}
 \begin{aligned}
 Q^* &= \underset{Q\in\mathcal Q}{argmin}~D_{KL}(Q(Z)\Vert P(Z|X)) 
 \\
 &= \underset{Q\in\mathcal Q}{argmax}~\mathbb E_{Z\sim Q(Z)}[log(P(X|Z))] 
 \\
-&- D_{KL}(Q(Z)||P(Z))
+&- D_{KL}(Q(Z)||P(Z)) = \mathbb E_q p - D_{KL}(p\Vert p)
 \end{aligned}
 $$
 
 \textbf{MLE}
-\vspace{-0.3cm}
+\vspace{-0.4cm}
+$$\vspace{-0.2cm}
+\hat \theta = \underset{\theta}{argmax}~P(X_{1:n}|\theta)
 $$
-\hat \theta = argmax_{\theta}P(X_{1:n}|\theta)
-$$
-sometimes will add $l_2$ norm which is $\Vert \cdot\Vert_2$ for vector and $\Vert \cdot \Vert_F$ for matrix
+sometimes add $l_2$ norm which is $\Vert \cdot - \mu \Vert_2^2$ for vector and $\Vert \cdot - \mu \Vert_F^2$ for matrix and $(\cdot-\mu)^2$ for scalar
 
 \textbf{MAP}
 \vspace{-0.3cm}
+$$\vspace{-0.2cm}
+\hat \theta = \underset{\theta}{argmax}(X_{1:n}|\theta,X')
 $$
-\hat \theta = argmax_\theta(X_{1:n}|\theta,X')
-$$
-
+\textbf{reparameterization tricks}\vspace{-0.3cm}
+\begin{itemize} \compresslist
+    \item  random variable continous
+    \item reduce variance by introducing bias
+    \item automatic differentiation
+\end{itemize}\vspace{-0.2cm}
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Markov Chain Monte Carlo}}
-\vspace{-0.3cm}
-$$
+\vspace{-0.4cm}
+$$\vspace{-0.3cm}
 \pi = \pi P
 $$
 
-where $\pi$ is the stationary state, $P$ is the transition matrix
+$\pi$ is the stationary state, $P$ is the transition matrix
 
 \textbf{ergodic}:$\exists t\in \mathbb N \rightarrow (P)^t >0$
-\vspace{0.2cm}
+\vspace{-0.3cm}
+
+\begin{itemize}\compresslist
+    \item MCMC used for any distribution
+    \item $P(x|x') = P(x'|x)\rightarrow$ uniform distribution
+\end{itemize}
+\vspace{-0.3cm}
 
 \underline{\textbf{Metropolis-Hastings (MH) Algorithm}}:
 
 given proposal transition $R(x'|x)$ and unnormalized stationary distribution $Q(x)$
 
 accept rate $\alpha = min\{1, \frac{Q(x')R(x|x')}{Q(x)R(x'|x)}\}$ from $x$ to $x'$
-\vspace{0.2cm}
+% \vspace{0.1cm}
 
 \underline{\textbf{Gibbs Sampling}} : random choose dimension
 
 \underline{\textbf{MALA}}:
-\vspace{-0.3cm}
-$$
+\vspace{-0.6cm}
+$$\vspace{-0.3cm}
 R(x'|x) = \mathcal N(x'|x-\tau \nabla f(x) ;2\tau I)
 $$
 
 \underline{\textbf{Stochastic Gradient Langevin Dynamics(SGLD)}}
-\vspace{-0.3cm}
-$$
+\vspace{-0.4cm}
+$$\vspace{-0.3cm}
 \begin{aligned}
 \Delta\theta &=  -\eta(\nabla log~p(\theta_t) + \frac{N}{n}\sum_{j=1}^n \nabla  log p(y_{i_{j}} | \theta_t, x_{i_j})) + \epsilon_t \\
-& = -\eta(\theta_t + L(\theta_t)) + \epsilon_t\\
+& = -\eta(\theta_t + \nabla_\theta log~L(\theta_t)) + \epsilon_t\\
 \epsilon_t &\sim \mathcal N(0, 2\eta I)\\
 \end{aligned}
 $$
-where $L(\theta_t)$ is the likelihood
+$L(\theta_t)$ is the likelihood
 
-can guarantee convergence.
+can guarantee convergence, need burn in step
 
 
-%------------------------------------------------
-% Bayesian DeepLearning
-%------------------------------------------------
 
 
 }
@@ -467,13 +496,13 @@ linewidth=1pt % Width of the border lines around content boxes
 %----------------------------------------------------------------
 \headerbox{Bayesian DL \& Optimization}{name=results,column=0,span=1,row=0}{
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Bayesian DeepLearning}}
-
-$$
+\vspace{-0.1cm}
+$$\vspace{-0.2cm}
 P(y|x,\theta) \sim \mathcal N(y|f_\mu(x;\theta_\mu) , exp(f_\sigma(x;\theta_\sigma)))
 $$
 \textbf{train}
 \vspace{-0.5cm}
-$$
+$$\vspace{-0.2cm}
 \begin{aligned}
 \hat \theta &= \underset{\theta}{argmin} - lnP(\theta) - \sum_{i=1}^{n}lnP(y_i|x_i,\theta)
 \\
@@ -483,11 +512,11 @@ $$
 $$
 
 \textbf{predict}
-\vspace{-0.5cm}
-$$
+\vspace{-0.6cm}
+$$\vspace{-0.2cm}
 P(y'|x',X,Y) = \mathbb E_{\theta\sim q}[P(y'|x',\theta)]
 $$
-$$
+$$\vspace{-0.3cm}
 \begin{aligned}
 Var[y'|x',X,Y] &= {\color{orange}\mathbb E_{\theta\sim q}[Var[y'|x',\theta]]}\\
 &+{\color{green}Var[\mathbb E_{\theta\sim q}[y'|x',\theta]]}
@@ -497,13 +526,19 @@ $$
     \item \textcolor{orange}{Aleatoric uncertainty(random)} 
     \item \textcolor{green}{Epistemic uncertainty(knowledge)}
 \end{itemize}
-\begin{itemize}\compresslist
-    \item MAP for BNN is  not closed
-    \item MLE for BNN is closed
-\end{itemize}
-\underline{\textbf{Stochastic Weight Averaging-Gaussian(SWAG)}}
 \vspace{-0.2cm}
-$$
+\begin{itemize}\compresslist
+    \item MAP for BNN is  not closed, unless likelihood and prior are $\mathcal N$
+    \item MLE for BNN is closed
+    \item $Var(C\theta|\theta) = 0 \quad \theta \sim p$
+\end{itemize}
+\vspace{-0.3cm}
+approximate inference for BNN: 1.SGLD, 2.Dropout, 3.Ensemble, 4.black-box stochastic variational inference
+
+% \vspace{-0.3cm}
+\underline{\textbf{Stochastic Weight Averaging-Gaussian(SWAG)}}
+\vspace{-0.3cm}
+$$\vspace{-0.3cm}
 \begin{aligned}
 \mu_{SWA} &= \frac{1}{T}\sum_1^\top \theta_i\\
 \Sigma_{SWA} &= \frac{1}{T-1}\sum_1^\top(\theta_i - \mu_{SWA})(\theta_i-\mu_{SWA})^\top
@@ -512,7 +547,7 @@ $$
 
 \underline{\textbf{Dropout}}
 \vspace{-0.3cm}
-$$ 
+$$\vspace{-0.2cm}
 p(y^*|x^*,X,Y) \approx \mathbb E_{\theta\sim q(\cdot|\lambda)}[p(y^*|x^*,\theta)]
 $$
 \begin{itemize}\compresslist
@@ -526,7 +561,7 @@ $$
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Bayesian Optimization}}
 \underline{\textbf{Mutual Information}}
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.3cm}
 \begin{aligned}
 F(s) &= H(f) - H(f|y_s) = \frac{1}{2}log|I+\sigma^{-2}K_s|
 \\
@@ -535,14 +570,17 @@ F(S_T) &\ge (1-\frac{1}{e})\underset{S\subseteq D,|S|\le T}{max}~F(S)
 $$
 
 \underline{\textbf{regret}}
-\vspace{-0.7cm}
-$$
+\vspace{-0.8cm}
+$$\vspace{-0.4cm}
 R_T = \sum_{t=1}^\top (max_{x\in D}f(x)-f(x_t))
 $$
 \begin{itemize}\compresslist
     \item sublinear(optimal) if $\frac{R_T}{T} \rightarrow 0$
+
+    $\underset{t\rightarrow \infty}{lim}~f(x_t)\rightarrow f(x^*)$
     \item $R_T^A \le R_T^B$ cannot tell anything
-    \item $\forall T~R_T^A \le R_T^B$ menas A is better
+    \item $\forall t~R_t^A \le R_t^B$ menas A is better
+    \item $R\uparrow \rightarrow$ more exploration
 \end{itemize}
 
 
@@ -552,48 +590,51 @@ $$
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Bayesian Optimization}}
 \textbf{Uncertainty Sampling}
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.3cm}
 x_t = \underset{x\in D}{argmax} \frac{\textcolor{green}{\sigma_{e}^2(x)}}{\textcolor{orange}{\sigma_a(x)}}
 $$
 \vspace{-0.3cm}
-\begin{itemize}
-    \item maximizing information gain in homoscedastic noise case
-    \item $\underset{t\rightarrow \infty}{lim}~\hat x_t = \underset{\in D}{argmax}~\mu_t(x)$, $f(\hat x )\rightarrow f(x^*)$
+\begin{itemize}\compresslist
+    \item[\checkmark] max info gain in homoscedastic noise case
+    \item[\XSolidBrush] max info gain in heterodastic noise 
+    \item[\checkmark] $\underset{t\rightarrow \infty}{lim}~\hat x_t = \underset{x\in D}{argmax}~\mu_t(x)$, $f(\hat x )\rightarrow f(x^*)$
+    \item[\XSolidBrush] $\underset{t\rightarrow \infty}{lim} f(x_t)\rightarrow f(x^*)$
 \end{itemize}
 
-\textbf{Upper Confidence Sampling(UCB)}
+\underline{\textbf{Upper Confidence Sampling(UCB)}}
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.3cm}
 a = \mu_t(x) + \beta \sigma_t(x)
 $$
 \vspace{-0.3cm}
-\textbf{Probability of Improvement(PI)}
-$$
+\underline{\textbf{Probability of Improvement(PI)}}
+$$\vspace{-0.3cm}
 a = \Phi\left(\frac{\mu_t(x)-f^*}{\sigma_t(x)}\right)
 $$
 \vspace{-0.3cm}
-\textbf{Expected Improvement(EI)}
-$$
+\underline{\textbf{Expected Improvement(EI)}}
+$$\vspace{-0.3cm}
 \begin{aligned}
 a &= (\mu_t(x)-f^*)\Phi\left(\frac{\mu_t(x)-f^*}{\sigma_t(x)}\right) \\
 &+ \sigma_t(x)\phi\left(\frac{\mu_t(x)-f^*}{\sigma_t(x)}\right)
 \end{aligned}
 $$
 \vspace{-0.3cm}
-\includegraphics[width=0.8\textwidth, trim={0cm 1cm 0 0.2cm},clip]{figures/yzAfp5mekGTuO7w.png}
+\includegraphics[width=0.9\textwidth, trim={0cm 1cm 0 0.2cm},clip]{figures/yzAfp5mekGTuO7w.png}
 \includegraphics[width=0.8\textwidth,trim={0cm 1cm 0 0.2cm},clip]{figures/FqXAlIgS45KoYxp.png}
 \centering{
-a:UCB($\beta=0.5$) \ \ 
-b:EI \ \ 
-c:PI \ \ 
-d:UCB($\beta=2$)
+\begin{tabular}{c|c}
+     UCB($\beta=0.5$) & EI\\\hline
+     PI & UCB($\beta=2$)
+\end{tabular}
 }
+
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.4cm}
 acquisition\uparrow \Longleftrightarrow exploitation
 $$
 \vspace{-0.3cm}
-$$
+$$\vspace{-0.4cm}
 acquisition\downarrow \Longleftrightarrow exploration
 $$
 \vspace{-0.3cm}
@@ -620,24 +661,25 @@ $$
 \end{itemize}
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Model Based}}
 
-\underline{\textbf{Value Iteration}}
+\underline{\textbf{Value Iteration}}\vspace{-0.3cm}
 \begin{itemize}\compresslist
-    \item guarantee converge to an $\varepsilon$ optimal policy not the exact optimal policy
-    \item polynomial time, performance depend on the input
+    \item guarantee converge to an \underline{$\varepsilon$ optimal policy} not the exact optimal policy
+    \item polynomial time
+    \item performance depend on the input
 \end{itemize}
-\underline{\textbf{Policy Iteration}}
+\underline{\textbf{Policy Iteration}}\vspace{-0.3cm}
 \begin{itemize}\compresslist
-    \item guaranteed to  monotonically improve the policy
+    \item monotonically improve the policy
+    \item polynomial time, gaurantee converge
 \end{itemize}
 \underline{\textbf{$\epsilon$ greedy}}
-\vspace{0.3cm}
 
 when random number $<\epsilon$ do the random action 
 
 \underline{\textbf{Rmax method}}
 
 set reward $R$ and transition probability $P(x^*|x,a)=1$ at first
-\begin{itemize}
+\begin{itemize}\compresslist
     \item with probability $1-\sigma$,reach $\varepsilon$ - optimal
     \item polynomial time in $|X|, |A|, T,\frac{1}{\varepsilon},log(\frac{1}{\delta})$
 \end{itemize}
@@ -662,7 +704,7 @@ $
 
 
 off-policy\vspace{-0.2cm}
-$$
+$$\vspace{-0.3cm}
 \hat Q^* \leftarrow (1-\alpha_t)\hat Q^*(x,a) + \alpha_t(r+\gamma \underset{a'}{max}\hat Q^*(x',a'))
 $$
 init : $\hat Q^*(x,a) = \frac{R_{max}}{1-\gamma}\Pi_{t=1}^{T_{init}}(1-\alpha_t)^{-1}$
@@ -675,13 +717,15 @@ Theorem: $\sum_t\alpha_t=\infty,\sum_t\alpha_t^2 < \infty \Rightarrow P(\hat Q^*
 \end{itemize}
 }
 
+
 %----------------------------------------------------------------
 %	Reinforcement Learning 2
 %----------------------------------------------------------------
 \headerbox{Deep RL}{name=conclusion,column=3,span=1,row=0}{
 \colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Model Free}}
-\underline{\textbf{REINFORCE}}
+\underline{\textbf{Policy Search}}
 
+\underline{\textbf{REINFORCE}}\vspace{-0.3cm}
 $$
 \begin{aligned}
 \nabla_{\theta} J(\theta) &= \mathbb E_{\tau\sim p_\theta(\tau)}[\sum_{t=0}^\top\gamma^t(\sum_{t'=t}^\top\gamma^{t'-t}r_{t'})\nabla_\theta ln\pi_\theta(a_t|x_t)]
@@ -691,7 +735,7 @@ $$
 $$
 
 \underline{\textbf{Actor-Critic}}
-
+\vspace{-0.3cm}
 $$
 \begin{aligned}
 \nabla_{\theta_\pi} J(\theta_\pi) &= \mathbb E_{(x,a)\sim \pi_{\theta_\pi}} 
@@ -703,6 +747,9 @@ $$
 &- \gamma Q_{\theta_Q}(x',\pi_{\theta_\pi}(x')))\nabla_{\theta_Q}Q_{\theta_Q}(x,a)
 \end{aligned}
 $$
+\begin{itemize}\compresslist
+    \item use a baseline to reduce variance in the gradient estimates
+\end{itemize}
 
 \underline{\textbf{Proximal Policy Optimization(PPO)}}
 
@@ -717,8 +764,10 @@ L_{\theta_k}(\theta_k) &= \mathbb E_{\tau \sim \pi_k}\sum_{t=0}^\infty \left[\fr
 $$
 
 \underline{\textbf{Deep Deterministic Policy Gradients(DDPG)}}
+\begin{itemize}\compresslist
+    \item randomly add noise ensure sufficient  exploration
+\end{itemize}
 
-randomly add noise ensure sufficient  exploration
 
 \begin{tabular}{|c|c|}
     \hline
@@ -738,6 +787,25 @@ Monte Carlo Tree Search
 
 \underline{\textbf{PETS}}
 
+
+\colorbox[HTML]{CCFFFF}{\makebox[\textwidth-2\fboxsep][l]{\bf - Other}}
+\textbf{Bernoulli distribution}\vspace{-0.3cm}
+$$\vspace{-0.3cm}
+\begin{aligned}
+Bernoulli(x;p) &= p^x(1-p)^{1-x}\\
+\mathbb  E[Bernoulli(x;p)] &= p\\
+\mathbb Var[Bernoulli(x;p)] &= p(1-p)
+\end{aligned}
+$$
+
+\textbf{Poisson distribution}\vspace{-0.3cm}
+$$
+\begin{aligned}
+Pr(x;\lambda) &= \frac{\lambda^k e^{-\lambda}}{k!}\\
+\mathbb E[Pr(x;\lambda)] &= \lambda\\
+\mathbb Var[Pr(x;\lambda)] &= \lambda\\
+\end{aligned}
+$$
 %-----------------------------------
 }
 %----------------------------------------------------------------
