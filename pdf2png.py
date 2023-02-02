@@ -24,8 +24,8 @@ def pdf2png(pdf_path, zoom):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("This is a pdf to png converter based on fitz")
     parser.add_argument("-p", "--path", type=str,
-                        default="Probabilistic_Artificial_Intelligence_CheatSheet.pdf")
-    parser.add_argument("-z","--zoom", type=int, default=3)
+                        default="ETHz_Probabilistic_Artificial_Intelligence_CheatSheet.pdf")
+    parser.add_argument("-z","--zoom", type=int, default=2)
     config = parser.parse_args()
     pdf2png(config.path, config.zoom)
 
